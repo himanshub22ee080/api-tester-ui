@@ -11,8 +11,7 @@ BASE_API_URL = "http://13.233.194.87:8000/gabu-nika-stream/"
 #    These are the names that will be appended to the base URL and shown in the dropdown.
 MODEL_NAMES = (
     "qwen_ft",
-    "llama3_ft_example",  # Example for another model
-    "mistral_ft_example"  # Example for a third model
+    # "llama3_ft_example",  # Example for another model
 )
 # To add a new model, just add its name to this tuple!
 
