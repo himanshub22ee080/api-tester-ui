@@ -19,6 +19,18 @@ MODEL_NAMES = (
 st.set_page_config(page_title="Finetuned Model Chat", layout="centered")
 st.title("Finetuned Model Chat")
 
+# Add custom background image
+st.markdown("""
+    <style>
+    .stApp {
+        background-image: url("https://cdn.mos.cms.futurecdn.net/VFLt5vHV7aCoLrLGjP9Qwm.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # --- Session State Initialization ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
