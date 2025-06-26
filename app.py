@@ -19,18 +19,6 @@ MODEL_NAMES = (
 st.set_page_config(page_title="Finetuned Model Chat", layout="centered")
 st.title("Finetuned Model Chat")
 
-# adding custom CSS to style the chat messages
-st.markdown("""
-    <style>
-    .element-container .chat-message {
-        background-color: rgba(221, 184, 31, 0.73);
-        padding: 10px;
-        border-radius: 10px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-
 # --- Session State Initialization ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
