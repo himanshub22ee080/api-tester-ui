@@ -31,6 +31,16 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+st.markdown("""
+    <style>
+    .stChatMessage {
+        background-color: rgba(255, 255, 255, 0.8) !important;
+        border-radius: 10px;
+        padding: 10px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # --- Session State Initialization ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
