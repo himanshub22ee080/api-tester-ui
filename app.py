@@ -24,7 +24,7 @@ CHAT_MODELS = (
 )
 
 # Combine models for dropdown
-ALL_MODELS = GABU_MODELS + CHAT_MODELS
+ALL_MODELS = CHAT_MODELS + GABU_MODELS 
 
 # --- Page Setup ---
 st.set_page_config(page_title="Model Testing UI", layout="centered")
