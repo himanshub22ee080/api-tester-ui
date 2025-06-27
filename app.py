@@ -4,15 +4,15 @@ import json
 from collections.abc import Generator
 
 # --- Configuration ---
-BASE_API_URL = "http://13.233.194.87:8000/gabu-nika-stream/"
+BASE_API_URL_1 = "http://13.233.194.87:8000/gabu-nika-stream/"
 BASE_API_URL_2 = "http://13.233.194.87:8000/chat-stream/"
 
-MODEL_NAMES = (
+FINETUNED_MODELS = (
     "qwen_ft",
     # Add more gabu-nika-stream models here
 )
 
-MODEL_NAMES_2 = (
+RAG_MODELS= (
     "deepseek_r1", "qwen3_235b", "deepseek_prover_671b", "llama_3_70b", "qwen_25_72b"
 )
 
@@ -79,12 +79,10 @@ if prompt := st.chat_input("What would you like to ask?"):
     with st.chat_message("assistant"):
         # Extract clean model name
         selected = st.session_state.selected_model
-        if selected.startswith("[gabu-nika]"):
-            model_name = selected.replace("[gabu-nika] ", "")
-            api_url_to_use = f"{BASE_API_URL}{model_name}"
-        elif selected.startswith("[chat-stream]"):
-            model_name = selected.replace("[chat-stream] ", "")
-            api_url_to_use = f"{BASE_API_URL_2}{model_name}"
+        if selected_model in FINETUNED_MODELS:
+            api_url_to_use = f"{BASE_API_URL_1}{selected_model}"
+        elif selected_model in RAG_MODELS:
+            api_url_to_use = f"{BASE_API_URL_2}{selected_model}"
         else:
             st.error("Invalid model selection.")
             st.stop()
