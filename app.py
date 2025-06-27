@@ -3,66 +3,55 @@ import requests
 import json
 from collections.abc import Generator
 
-# --- Configuration --- _MODIFIED_
-# 1. Define the base URL that is common to all your models.
+# --- Configuration ---
 BASE_API_URL = "http://13.233.194.87:8000/gabu-nika-stream/"
+BASE_API_URL_2 = "http://13.233.194.87:8000/chat-stream/"
 
-# 2. Create a list or tuple of the model names.
-#    These are the names that will be appended to the base URL and shown in the dropdown.
 MODEL_NAMES = (
     "qwen_ft",
-     "llama3_ft_example",  # Example for another model
+    # Add more gabu-nika-stream models here
 )
-# To add a new model, just add its name to this tuple!
+
+MODEL_NAMES_2 = (
+    "deepseek_r1", "qwen3_235b", "deepseek_prover_671b", "llama_3_70b", "qwen_25_72b"
+)
+
+# Combine both for the dropdown with clear labels
+MODEL_OPTIONS = (
+    [f"[gabu-nika] {name}" for name in MODEL_NAMES] +
+    [f"[chat-stream] {name}" for name in MODEL_NAMES_2]
+)
 
 # --- Page Setup ---
 st.set_page_config(page_title="Finetuned Model Chat", layout="centered")
 st.title("Finetuned Model Chat")
 
-# adding custom CSS to style the chat messages
-st.markdown("""
-    <style>
-    .element-container .chat-message {
-        background-color: rgba(221, 184, 31, 0.73);
-        padding: 10px;
-        border-radius: 10px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-
 # --- Session State Initialization ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# _MODIFIED_: Initialize the selected model using the first name from our new list.
 if "selected_model" not in st.session_state:
-    st.session_state.selected_model = MODEL_NAMES[0]
+    st.session_state.selected_model = MODEL_OPTIONS[0]
 
 # --- Sidebar for Options ---
 with st.sidebar:
     st.header("Options")
-    
-    # _MODIFIED_: The dropdown now uses the simple MODEL_NAMES list.
     st.selectbox(
         "Choose a Model:",
-        options=MODEL_NAMES,
+        options=MODEL_OPTIONS,
         key="selected_model"
     )
-
     clear_history = st.toggle("Start New Conversation", value=True)
-    
     if st.button("Clear Chat Window"):
         st.session_state.messages = []
         st.rerun()
 
-# --- Chat Interface ---
+# --- Chat Display ---
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# --- The Core Logic: Function to Stream API Response ---
-# This function no longer needs modification, it already accepts the full URL.
+# --- Streaming Function ---
 def stream_response(prompt: str, clear_history_flag: bool, api_url: str):
     headers = {
         "Content-Type": "application/json",
@@ -77,38 +66,33 @@ def stream_response(prompt: str, clear_history_flag: bool, api_url: str):
                     if chunk:
                         yield chunk.decode('utf-8', errors='ignore')
             else:
-                error_message = f"Error: {response.status_code}\n{response.text}"
-                yield error_message
-                
+                yield f"Error: {response.status_code}\n{response.text}"
     except requests.exceptions.RequestException as e:
         yield f"Request Error: {e}"
 
-
-# --- Handle User Input at the Bottom of the Page ---
+# --- User Input Handling ---
 if prompt := st.chat_input("What would you like to ask?"):
-    
-    # 1. Add the user's message to our history and display it.
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # 2. Get the assistant's response.
     with st.chat_message("assistant"):
-        # _MODIFIED_: Dynamically construct the full API URL here.
-        selected_model_name = st.session_state.selected_model
-        
-        # Using an f-string to combine the base URL and the selected model name.
-        api_url_to_use = f"{BASE_API_URL}{selected_model_name}"
-        
-        # Display the URL being used for debugging/confirmation (optional)
-        # st.caption(f"Pinging endpoint: `{api_url_to_use}`")
+        # Extract clean model name
+        selected = st.session_state.selected_model
+        if selected.startswith("[gabu-nika]"):
+            model_name = selected.replace("[gabu-nika] ", "")
+            api_url_to_use = f"{BASE_API_URL}{model_name}"
+        elif selected.startswith("[chat-stream]"):
+            model_name = selected.replace("[chat-stream] ", "")
+            api_url_to_use = f"{BASE_API_URL_2}{model_name}"
+        else:
+            st.error("Invalid model selection.")
+            st.stop()
 
-        # Pass the fully constructed URL to the streaming function.
         response_generator = stream_response(prompt, clear_history, api_url_to_use)
         full_response = st.write_stream(response_generator)
-    
-    # 3. Add the full response from the assistant to our history.
+
     st.session_state.messages.append({"role": "assistant", "content": full_response})
-    
+
     if clear_history:
         pass
