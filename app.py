@@ -2,6 +2,12 @@ import streamlit as st
 import requests
 import json
 from collections.abc import Generator
+from streamlit_lottie import st_lottie
+
+def load_lottiefile(filepath: str):
+    with open(filepath, "r") as f:
+        return json.load(f)
+
 
 # --- Configuration ---
 BASE_API_URL_GABU = "http://13.233.194.87:8000/gabu-nika-stream/"
@@ -24,6 +30,19 @@ ALL_MODELS = GABU_MODELS + CHAT_MODELS
 st.set_page_config(page_title="Model Testing UI", layout="centered")
 
 st.title("Model Testing UI 🤖")
+
+# --- Lottie Animation Centered ---
+lottie_animation = load_lottiefile("your_animation.json")  # replace with your .json file name
+st.markdown("<div style='display: flex; justify-content: center;'>", unsafe_allow_html=True)
+st_lottie(
+    lottie_animation,
+    speed=1,
+    loop=True,
+    quality="high",
+    height=300,
+    key="centered_lottie"
+)
+st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Session State Initialization ---
 if "messages" not in st.session_state:
