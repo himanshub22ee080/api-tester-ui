@@ -50,7 +50,7 @@ st.markdown(
 
     /* Chat input box (optional styling) */
     textarea {
-        background-color: #ffffff !important;
+        background-color: red !important;
         color: black !important;
     }
 
