@@ -32,7 +32,7 @@ st.set_page_config(page_title="Model Testing UI", layout="centered")
 st.title("Model Testing UI 🤖")
 
 # --- Lottie Animation Centered ---
-lottie_animation = load_lottiefile("your_animation.json")  # replace with your .json file name
+lottie_animation = load_lottiefile("hello_animation.json")  # replace with your .json file name
 st.markdown("<div style='display: flex; justify-content: center;'>", unsafe_allow_html=True)
 st_lottie(
     lottie_animation,
