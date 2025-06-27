@@ -2,43 +2,61 @@ import streamlit as st
 import requests
 import json
 from collections.abc import Generator
+from streamlit_lottie import st_lottie
+
+def load_lottiefile(filepath: str):
+    with open(filepath, "r") as f:
+        return json.load(f)
+
 
 # --- Configuration ---
-BASE_API_URL = "http://13.233.194.87:8000/gabu-nika-stream/"
-BASE_API_URL_2 = "http://13.233.194.87:8000/chat-stream/"
+BASE_API_URL_GABU = "http://13.233.194.87:8000/gabu-nika-stream/"
+BASE_API_URL_CHAT = "http://13.233.194.87:8000/chat-stream/"
 
-MODEL_NAMES = (
+# Models for each endpoint
+GABU_MODELS = (
     "qwen_ft",
     # Add more gabu-nika-stream models here
 )
 
-MODEL_NAMES_2 = (
+CHAT_MODELS = (
     "deepseek_r1", "qwen3_235b", "deepseek_prover_671b", "llama_3_70b", "qwen_25_72b"
 )
 
-# Combine both for the dropdown with clear labels
-MODEL_OPTIONS = (
-    [f"[gabu-nika] {name}" for name in MODEL_NAMES] +
-    [f"[chat-stream] {name}" for name in MODEL_NAMES_2]
-)
+# Combine models for dropdown
+ALL_MODELS = GABU_MODELS + CHAT_MODELS
 
 # --- Page Setup ---
-st.set_page_config(page_title="Finetuned Model Chat", layout="centered")
-st.title("Finetuned Model Chat")
+st.set_page_config(page_title="Model Testing UI", layout="centered")
+
+st.title("Model Testing UI 🤖")
+
+# --- Lottie Animation Centered ---
+lottie_animation = load_lottiefile("hello_animation.json")  # replace with your .json file name
+st.markdown("<div style='display: flex; justify-content: center;'>", unsafe_allow_html=True)
+st_lottie(
+    lottie_animation,
+    speed=1,
+    loop=True,
+    quality="high",
+    height=300,
+    key="centered_lottie"
+)
+st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Session State Initialization ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if "selected_model" not in st.session_state:
-    st.session_state.selected_model = MODEL_OPTIONS[0]
+    st.session_state.selected_model = ALL_MODELS[0]
 
-# --- Sidebar for Options ---
+# --- Sidebar ---
 with st.sidebar:
     st.header("Options")
     st.selectbox(
         "Choose a Model:",
-        options=MODEL_OPTIONS,
+        options=ALL_MODELS,
         key="selected_model"
     )
     clear_history = st.toggle("Start New Conversation", value=True)
@@ -46,7 +64,7 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
-# --- Chat Display ---
+# --- Display Chat History ---
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -58,7 +76,7 @@ def stream_response(prompt: str, clear_history_flag: bool, api_url: str):
         "x-clear-history": "1" if clear_history_flag else "0"
     }
     data = {"prompt": prompt}
-    
+
     try:
         with requests.post(api_url, headers=headers, json=data, stream=True, timeout=120) as response:
             if response.status_code == 200:
@@ -70,23 +88,22 @@ def stream_response(prompt: str, clear_history_flag: bool, api_url: str):
     except requests.exceptions.RequestException as e:
         yield f"Request Error: {e}"
 
-# --- User Input Handling ---
+# --- Chat Input Handling ---
 if prompt := st.chat_input("What would you like to ask?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        # Extract clean model name
-        selected = st.session_state.selected_model
-        if selected.startswith("[gabu-nika]"):
-            model_name = selected.replace("[gabu-nika] ", "")
-            api_url_to_use = f"{BASE_API_URL}{model_name}"
-        elif selected.startswith("[chat-stream]"):
-            model_name = selected.replace("[chat-stream] ", "")
-            api_url_to_use = f"{BASE_API_URL_2}{model_name}"
+        selected_model = st.session_state.selected_model
+
+        # Determine correct URL based on the selected model
+        if selected_model in GABU_MODELS:
+            api_url_to_use = f"{BASE_API_URL_GABU}{selected_model}"
+        elif selected_model in CHAT_MODELS:
+            api_url_to_use = f"{BASE_API_URL_CHAT}{selected_model}"
         else:
-            st.error("Invalid model selection.")
+            st.error("Selected model is not configured correctly.")
             st.stop()
 
         response_generator = stream_response(prompt, clear_history, api_url_to_use)
