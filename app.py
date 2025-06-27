@@ -23,19 +23,6 @@ ALL_MODELS = GABU_MODELS + CHAT_MODELS
 # --- Page Setup ---
 st.set_page_config(page_title="Model Testing UI", layout="centered")
 
-# Set background colors for each part
-st.markdown(
-    """
-    <style>
-    /* Sidebar background */
-    [data-testid="stSidebar"] {
-        background-color: brown; /* light bluish */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 st.title("Model Testing UI 🤖")
 
 # --- Session State Initialization ---
