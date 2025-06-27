@@ -22,12 +22,42 @@ ALL_MODELS = GABU_MODELS + CHAT_MODELS
 
 # --- Page Setup ---
 st.set_page_config(page_title="Model Testing UI", layout="centered")
-# Set background color
+
+# Set background colors for each part
 st.markdown(
     """
     <style>
+    /* Main background */
     .stApp {
-        background-color: blue;
+        background-color: red; /* light grayish blue */
+    }
+
+    /* Sidebar background */
+    [data-testid="stSidebar"] {
+        background-color: blue; /* light bluish */
+    }
+
+    /* Sidebar text color */
+    [data-testid="stSidebar"] * {
+        color: black; /* change as needed */
+    }
+
+    /* Top header/title styling (optional, color and alignment) */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    /* Chat input box (optional styling) */
+    textarea {
+        background-color: #ffffff !important;
+        color: black !important;
+    }
+
+    /* Optional: adjust button colors */
+    button[kind="primary"] {
+        background-color: #4CAF50 !important; /* green */
+        color: white !important;
     }
     </style>
     """,
