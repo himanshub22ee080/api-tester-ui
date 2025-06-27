@@ -24,7 +24,6 @@ ALL_MODELS = GABU_MODELS + CHAT_MODELS
 st.set_page_config(page_title="Model Testing UI", layout="centered")
 # Set background color
 st.markdown(
-    """
     <style>
     .stApp {
         background-color: #f0f2f6;
@@ -33,7 +32,7 @@ st.markdown(
         background-color: #dbe4f0;
     }
     </style>
-    """,
+    ,
     unsafe_allow_html=True
 )
 
