@@ -18,13 +18,13 @@ MODEL_NAMES_2 = (
 
 # Combine both for the dropdown with clear labels
 MODEL_OPTIONS = (
-    [f"[gabu-nika] {name}" for name in MODEL_NAMES] +
-    [f"[chat-stream] {name}" for name in MODEL_NAMES_2]
+    [f"{name}" for name in MODEL_NAMES] +
+    [f"{name}" for name in MODEL_NAMES_2]
 )
 
 # --- Page Setup ---
-st.set_page_config(page_title="Finetuned Model Chat", layout="centered")
-st.title("Finetuned Model Chat")
+st.set_page_config(page_title="Model Testing", layout="centered")
+st.title("Model Testing UI")
 
 # --- Session State Initialization ---
 if "messages" not in st.session_state:
