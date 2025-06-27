@@ -29,7 +29,7 @@ st.markdown(
     <style>
     /* Sidebar background */
     [data-testid="stSidebar"] {
-        background-color: aquamarine; /* light bluish */
+        background-color: brown; /* light bluish */
     }
     </style>
     """,
