@@ -27,37 +27,14 @@ st.set_page_config(page_title="Model Testing UI", layout="centered")
 st.markdown(
     """
     <style>
-    /* Main background */
-    .stApp {
-        background-color: red; /* light grayish blue */
-    }
-
     /* Sidebar background */
     [data-testid="stSidebar"] {
-        background-color: blue; /* light bluish */
+        background-color: aquamarine; /* light bluish */
     }
 
     /* Sidebar text color */
     [data-testid="stSidebar"] * {
         color: black; /* change as needed */
-    }
-
-    /* Top header/title styling (optional, color and alignment) */
-    .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
-
-    /* Chat input box (optional styling) */
-    textarea {
-        background-color: red !important;
-        color: black !important;
-    }
-
-    /* Optional: adjust button colors */
-    button[kind="primary"] {
-        background-color: #4CAF50 !important; /* green */
-        color: white !important;
     }
     </style>
     """,
