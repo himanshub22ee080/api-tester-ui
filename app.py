@@ -18,8 +18,8 @@ RAG_MODELS= (
 
 # Combine both for the dropdown with clear labels
 MODEL_OPTIONS = (
-    [f"{name}" for name in MODEL_NAMES] +
-    [f"{name}" for name in MODEL_NAMES_2]
+    [f"{name}" for name in FINETUNED_MODELS] +
+    [f"{name}" for name in RAG_MODELS]
 )
 
 # --- Page Setup ---
