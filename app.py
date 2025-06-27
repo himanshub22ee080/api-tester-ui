@@ -31,11 +31,6 @@ st.markdown(
     [data-testid="stSidebar"] {
         background-color: aquamarine; /* light bluish */
     }
-
-    /* Sidebar text color */
-    [data-testid="stSidebar"] * {
-        color: black; /* change as needed */
-    }
     </style>
     """,
     unsafe_allow_html=True
