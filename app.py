@@ -21,8 +21,8 @@ CHAT_MODELS = (
 ALL_MODELS = GABU_MODELS + CHAT_MODELS
 
 # --- Page Setup ---
-st.set_page_config(page_title="Finetuned Model Chat", layout="centered")
-st.title("Finetuned Model Chat")
+st.set_page_config(page_title="Model Testing UI", layout="centered")
+st.title("Model Testing UI 🤖")
 
 # --- Session State Initialization ---
 if "messages" not in st.session_state:
